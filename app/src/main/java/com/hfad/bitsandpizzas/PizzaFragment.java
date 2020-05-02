@@ -1,6 +1,7 @@
 package com.hfad.bitsandpizzas;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -49,6 +50,17 @@ public class PizzaFragment extends Fragment {
         pizzaRecyclerView.setAdapter(adapter);
         GridLayoutManager grid = new GridLayoutManager(getActivity(), 2);
         pizzaRecyclerView.setLayoutManager(grid);
+
+        adapter.setListener(new CaptionedImagesAdapter.Listener() {
+            @Override
+            public void onClick(int position) {
+                Intent intent = new Intent(getActivity(), PizzaDetailActivity.class);
+                intent.putExtra(PizzaDetailActivity.Extra_PIZZA_ID, position);
+                getActivity().startActivity(intent);
+
+            }
+        });
+
         return pizzaRecyclerView;
     }
 

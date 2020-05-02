@@ -1,6 +1,7 @@
 package com.hfad.bitsandpizzas;
 
 import android.graphics.drawable.Drawable;
+import android.net.sip.SipSession;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,11 @@ public class CaptionedImagesAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     private String[] captions;
     private int[] imageIds;
+    private Listener listener;
+
+    interface Listener{
+        void onClick(int position);
+    }
 
     public CaptionedImagesAdapter(String[] captions, int[] imageIds) {
         this.captions = captions;
@@ -32,6 +38,10 @@ public class CaptionedImagesAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         }
     }
 
+    public void setListener(Listener listener){
+        this.listener = listener;
+    }
+
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -42,7 +52,7 @@ public class CaptionedImagesAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
         CardView cardView = (CardView) holder.itemView;
         ImageView imageView = cardView.findViewById(R.id.info_image);
 
@@ -51,6 +61,16 @@ public class CaptionedImagesAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         imageView.setContentDescription(captions[position]);
         TextView textView = cardView.findViewById(R.id.info_text);
         textView.setText(captions[position]);
+
+        cardView.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if(listener != null){
+                    listener.onClick(position);
+                }
+            }
+        });
     }
 
     @Override
